@@ -1,0 +1,15 @@
+neptun2ics by sevcsik <sevcsik@gmail.com>
+
+Converts Neptun timetable to iCalendar format
+
+First, view your timetable with 'Listas nyomtatas', and save it as complete web page.
+Then you can convert it to ics :)
+
+Usage: neptun2ics <input file> [output file] [options]
+       options: -d --date <"YYYY-MM-DD">      first monday of the semester
+                -f --format <"format">        format of the title field of events
+                -w --weeks <number of weeks>  length of active part of semester in weeks
+       format: available keywords: \#{name}, \#{code}, \#{location}
+               for example, '\#{name} (\#{code}) @ \#{location}'
+       note: some browsers like Chrome strips class attributes form saved html, 
+             so the script can't find the table. Save as complete web page to avoid this.
