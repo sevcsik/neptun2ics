@@ -2,6 +2,10 @@ neptun2ics by sevcsik <sevcsik@gmail.com>
 
 Converts Neptun timetable to iCalendar format
 
+Dependencies: ruby (tested with 1.9.1), rubygems, icalendar gem
+To install icalendar, do
+   # gem install icalendar
+
 First, view your timetable with 'Listas nyomtatas', and save it as complete web page.
 Then you can convert it to ics :)
 
