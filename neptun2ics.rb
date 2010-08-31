@@ -55,7 +55,7 @@ end
 opts = GetoptLong.new(
   ['--date',        '-d',   GetoptLong::REQUIRED_ARGUMENT],
   ['--title-format','-f',   GetoptLong::REQUIRED_ARGUMENT],
-  ['--weeks',       '-w',   GetoptLong::REQUIRED_ARGUMENT],
+  ['--weeks',       '-w',   GetoptLong::REQUIRED_ARGUMENT]
 )
 
 date = '2010-09-06'
@@ -86,7 +86,7 @@ end
 # Load html
 
 begin
-  input = File.new(input_fn, :r)
+  input = File.new(input_fn)
 rescue
   puts "Can\'t open file #{input_fn} for reading"
   exit 2
