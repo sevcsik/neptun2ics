@@ -27,7 +27,7 @@ Days = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vas�
 Freqs = ["Páratlan hét", "Páros hét", "Minden hét"]
 
 
-RowPattern = /\<tr class="TimeTable_Row"\>\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([0-9:]+)-([0-9:]+)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<\/tr\>/
+RowPattern = /\<tr class="TimeTable_Row"\>\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([0-9:]+)-([0-9:]+)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<\/tr\>/i
 
 class Course
   def initialize(code, name, start_time, end_time, day, location, freq, date)
