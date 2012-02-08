@@ -11,7 +11,7 @@ Usage: neptun2ics <input file> [output file] [options]
        options: -d --date <"YYYY-MM-DD">      first monday of the semester
                 -f --format <"format">        format of the title field of events
                 -w --weeks <number of weeks>  length of active part of semester in weeks
-       format: available keywords: \#{name}, \#{code}, \#{location}
+       format: available keywords: \#{name}, \#{group}, \#{code}, \#{location}
                for example, '\#{name} (\#{code}) @ \#{location}'
        note: some browsers like Chrome strips class attributes form saved html, 
              so the script can't find the table. Save as complete web page to avoid this.
@@ -27,12 +27,13 @@ Days = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vas�
 Freqs = ["Páratlan hét", "Páros hét", "Minden hét"]
 
 
-RowPattern = /\<tr class="TimeTable_Row"\>\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([0-9:]+)-([0-9:]+)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<\/tr\>/i
+RowPattern = /\<tr\>\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([0-9:]+)-([0-9:]+)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<td\>([^\<\>]*)(?:\<\/td\>)?\<\/tr\>/i
 
 class Course
-  def initialize(code, name, start_time, end_time, day, location, freq, date)
+  def initialize(code, name, group, start_time, end_time, day, location, freq, date)
     @code = code
     @name = name
+    @group = group.split(' ')[0] # csak az eleje kell, a " ()" rész nem
     @day = Days.index(day)
     @location = location
     @freq = Freqs.index(freq)
@@ -48,7 +49,7 @@ class Course
       @end_time += 60 * 60 * 24 * 7
     end
   end
-  attr_accessor :code, :name, :day, :location, :freq, :start_time, :end_time
+  attr_accessor :code, :name, :day, :location, :freq, :start_time, :end_time, :group
 end
 
 
@@ -58,8 +59,8 @@ opts = GetoptLong.new(
   ['--weeks',       '-w',   GetoptLong::REQUIRED_ARGUMENT]
 )
 
-date = '2010-09-06'
-title_format = '#{name}'
+date = '2012-02-06'
+title_format = '#{name} (#{group})'
 weeks = 14
 
 # Parse arguments
@@ -95,7 +96,7 @@ end
 # Find the line with the table (yes, it's in a single line)
 
 while line = input.gets
-  if line.index('TimeTable_Data')
+  if line.index('timetabletitle')
     str = line
     break
   end
@@ -112,7 +113,7 @@ matches = str.scan(RowPattern)
 
 courses = []
 for match in matches
-  courses << Course.new(match[3], match[4], match[1], match[2], match[0], match[5], match[6], date)
+  courses << Course.new(match[3], match[4], match[5], match[1], match[2], match[0], match[6], match[7], date)
 end
 
 # Create calendar
@@ -128,6 +129,7 @@ for course in courses
   sum = title_format.gsub('#{name}', course.name)
   sum = sum.gsub('#{location}', course.location)
   sum = sum.gsub('#{code}', course.code)
+  sum = sum.gsub('#{group}', course.group)
   event.summary = sum
 
   event.location = course.location
